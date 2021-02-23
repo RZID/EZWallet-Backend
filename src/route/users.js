@@ -13,7 +13,7 @@ const singleUpload = require('../helper/middleware/upload')
 Router
     .post('/api/login', login)
     .post('/api/register', register)
-    .patch('/api/user/:id', singleUpload, authentication, updateUser)
+    .patch('/api/user/:id', authentication, singleUpload, updateUser)
     .post('/api/loginPIN/:id', authentication, loginPIN)
 
 module.exports= Router

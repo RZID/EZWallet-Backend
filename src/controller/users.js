@@ -8,6 +8,7 @@ const {
 const { success, failed, notFound } = require('../helper/response')
 const jwt = require('jsonwebtoken')
 const { JWT_SECRET } = require('../helper/env')
+const fs = require('fs')
 
 module.exports = {
     login: (req, res) => {
@@ -82,10 +83,15 @@ module.exports = {
     updateUser: async (req, res) => {
         try {
             const data = req.body
-            const salt = await bcrypt.genSalt(10) // 10 to make code more unique (optional)
-            data.pin = await bcrypt.hash(data.pin, salt)
+            // const salt = await bcrypt.genSalt(10) // 10 to make code more unique (optional)
+            // data.pin = await bcrypt.hash(data.pin, salt)
             const id = req.params.id
             const detail = await mDetailUser(id)
+
+            if(data.pin){
+                const salt = await bcrypt.genSalt(10)
+                data.pin = await bcrypt.hash(data.pin, salt)
+            }
             if(req.file){
                 if(detail[0].image === 'default.png'){
                     data.image = req.file.filename
@@ -93,7 +99,8 @@ module.exports = {
                     .then((response)=>{
                         success(res, response, {}, 'Update profile success')
                     }).catch((err)=>{
-                        failed(res, 'Internal server error', [])
+                        // failed(res, 'Internal server error', [])
+                        console.log(err)
                     }) 
                 }else{
                     data.image = req.file.filename
@@ -115,7 +122,8 @@ module.exports = {
                 })
             }
         } catch (error) {
-            failed(res, 'Internal server error', [])
+            // failed(res, 'Internal server error', [])
+            console.log(error)
         }
     },
     loginPIN: (req, res) => {
@@ -129,17 +137,13 @@ module.exports = {
                 }else{
                     failed(res, 'Login failed, please check your PIN number', {})
                 }
-            }else{
-                notFound(res,"Email not found", {})
             }
-            // console.log(response)
         }).catch((err) => {
-            if(!body.email || !body.password){
+            if(!body.pin){
                 failed(res, 'Please input all field', err)
             }else{
                 failed(res, 'Internal server error', err)
             }
-            // console.log(err)
         })
     }
 }
