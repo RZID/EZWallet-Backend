@@ -82,6 +82,8 @@ module.exports = {
     updateUser: async (req, res) => {
         try {
             const data = req.body
+            const salt = await bcrypt.genSalt(10) // 10 to make code more unique (optional)
+            data.pin = await bcrypt.hash(data.pin, salt)
             const id = req.params.id
             const detail = await mDetailUser(id)
             if(req.file){
@@ -115,5 +117,29 @@ module.exports = {
         } catch (error) {
             failed(res, 'Internal server error', [])
         }
+    },
+    loginPIN: (req, res) => {
+        const body = req.body
+        const id = req.params.id
+        mDetailUser(id).then( async (response) => {
+            if(response.length === 1){
+                const checkPIN = await bcrypt.compare(body.pin, response[0].pin)
+                if(checkPIN){
+                    success(res, {}, {}, 'Login success')
+                }else{
+                    failed(res, 'Login failed, please check your PIN number', {})
+                }
+            }else{
+                notFound(res,"Email not found", {})
+            }
+            // console.log(response)
+        }).catch((err) => {
+            if(!body.email || !body.password){
+                failed(res, 'Please input all field', err)
+            }else{
+                failed(res, 'Internal server error', err)
+            }
+            // console.log(err)
+        })
     }
 }
