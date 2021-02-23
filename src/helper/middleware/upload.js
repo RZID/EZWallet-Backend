@@ -13,7 +13,7 @@ const multerStorage = multer.diskStorage({
 
 const upload = multer({
     storage: multerStorage,
-    limits: { fieldSize: 8 * 1024 * 1024 },
+    limits: { fieldSize: 8 * 1024 * 1024 }, // 8 MB
     fileFilter: (req, file, cb) => {
         const ext = (/\.(gif|jpe?g|png)$/i).test(`${Date.now()}${path.extname(file.originalname)}`);
         // 

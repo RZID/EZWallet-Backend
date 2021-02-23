@@ -25,7 +25,8 @@ module.exports = {
                     res.json({
                         message: 'Login success',
                         token,     // same property and value
-                        name: response[0].name
+                        name: response[0].name,
+                        id: response[0].id
                     })
                 }else{
                     failed(res, 'Login failed, please check your password', {})
@@ -83,8 +84,6 @@ module.exports = {
     updateUser: async (req, res) => {
         try {
             const data = req.body
-            // const salt = await bcrypt.genSalt(10) // 10 to make code more unique (optional)
-            // data.pin = await bcrypt.hash(data.pin, salt)
             const id = req.params.id
             const detail = await mDetailUser(id)
 
