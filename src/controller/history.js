@@ -1,7 +1,8 @@
 const {
     mListHistory,
     mTotal,
-    mInsertHistory
+    mInsertHistory,
+    mUpdateHistory
 } = require('../model/history')
 
 const { success, failed, notFound } = require('../helper/response')
@@ -64,5 +65,20 @@ module.exports = {
         } catch (error) {
             failed(res, 'Internal server error', [])
         }
-    }
+    },
+    updateHistory: (req, res)=>{
+        try {
+            const data = req.body
+            const id = req.params.id
+    
+            mUpdateHistory(data, id)
+            .then((response)=>{
+                success(res, response, {}, 'Update history success')
+            }).catch(()=>{
+                failed(res, 'Internal server error', [])
+            })
+        } catch (error) {
+            failed(res, 'Internal server error', [])
+        }
+    },
 }
