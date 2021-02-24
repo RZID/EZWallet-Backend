@@ -47,5 +47,31 @@ module.exports = {
                 }
             })
         })
-    }
+    },
+    mAllUser: (searchParams, search, param, sort ,offset, limit) => {
+        return new Promise ((resolve, reject)=>{
+            connection.query(`SELECT * FROM users
+            WHERE ${searchParams} LIKE '%${search}%' ORDER BY ${param} ${sort}
+            LIMIT ${offset}, ${limit} `
+            ,(err, result)=>{
+                if(err){
+                    reject(new Error(err))
+                }else{
+                    resolve(result)
+                }
+            })
+        })
+    },
+    mTotal: (searchParams, search) => {
+        return new Promise ((resolve, reject)=>{
+            connection.query(`SELECT COUNT(*) as total FROM users WHERE ${searchParams} LIKE '%${search}%'`
+            ,(err, result)=>{
+                if(err){
+                    reject(new Error(err))
+                }else{
+                    resolve(result)
+                }
+            })
+        })
+    },
 }
