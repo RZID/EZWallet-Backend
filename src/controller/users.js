@@ -16,17 +16,35 @@ module.exports = {
         mCheckEmail(body.email).then( async (response) => {
             if(response.length === 1){
                 const checkPassword = await bcrypt.compare(body.password, response[0].password)
-                if(checkPassword){
+                if(checkPassword && response[0].pin.length != 0){
+                    
                     const dataUser = {  // data to be encrypted by JWT
                         id: response[0].id,
                         email: response[0].email
                     }
                     const token = jwt.sign(dataUser, JWT_SECRET)
+                    
                     res.json({
                         message: 'Login success',
                         token,     // same property and value
                         name: response[0].name,
-                        id: response[0].id
+                        id: response[0].id,
+                        pin: true
+                    })
+                }else if(checkPassword && response[0].pin.length === 0){
+                    
+                    const dataUser = {  // data to be encrypted by JWT
+                        id: response[0].id,
+                        email: response[0].email
+                    }
+                    const token = jwt.sign(dataUser, JWT_SECRET)
+                    
+                    res.json({
+                        message: 'Login success',
+                        token,     // same property and value
+                        name: response[0].name,
+                        id: response[0].id,
+                        pin: false
                     })
                 }else{
                     failed(res, 'Login failed, please check your password', {})
@@ -98,8 +116,7 @@ module.exports = {
                     .then((response)=>{
                         success(res, response, {}, 'Update profile success')
                     }).catch((err)=>{
-                        // failed(res, 'Internal server error', [])
-                        console.log(err)
+                        failed(res, 'Internal server error', [])
                     }) 
                 }else{
                     data.image = req.file.filename
@@ -121,8 +138,7 @@ module.exports = {
                 })
             }
         } catch (error) {
-            // failed(res, 'Internal server error', [])
-            console.log(error)
+            failed(res, 'Internal server error', [])
         }
     },
     loginPIN: (req, res) => {
