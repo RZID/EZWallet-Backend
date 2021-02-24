@@ -70,7 +70,7 @@ module.exports = {
             password: body.password,
             image: 'default.png',
             pin: '',
-            phone: ''
+            phone: '+62'
         }
         mCheckEmail(data.email).then( async (response) => {
             if(response.length >= 1){
