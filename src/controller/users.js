@@ -160,5 +160,19 @@ module.exports = {
                 failed(res, 'Internal server error', err)
             }
         })
+    },
+    detailUser: (req, res) => {
+        const id = req.params.id
+        mDetailUser(id)
+        .then((response) => {
+            if(response.length>0) {
+                success(res, response, {}, 'Get detail user')
+            } else {
+                notFound(res,"Id user not found", {})
+            }
+        })
+        .catch((err) => {
+            failed(res, 'Internal server error', err)
+        })
     }
 }
