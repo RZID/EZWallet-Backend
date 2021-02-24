@@ -70,7 +70,7 @@ module.exports = {
             password: body.password,
             image: 'default.png',
             pin: '',
-            phone: ''
+            phone: '+62'
         }
         mCheckEmail(data.email).then( async (response) => {
             if(response.length >= 1){
@@ -168,7 +168,15 @@ module.exports = {
         mDetailUser(id)
         .then((response) => {
             if(response.length>0) {
-                success(res, response, {}, 'Get detail user')
+                const data = {
+                    id: response[0].id,
+                    name: response[0].name,
+                    email: response[0].email,
+                    image: response[0].image,
+                    phone: response[0].phone,
+                    balance: response[0].balance
+                }
+                success(res, data, {}, 'Get detail user')
             } else {
                 notFound(res,"Id user not found", {})
             }
