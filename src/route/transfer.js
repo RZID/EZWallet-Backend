@@ -4,6 +4,6 @@ const Router = express.Router()
 const { transfer } = require('../controller/transfer')
 
 Router
-    .post('/transfer/:id', transfer)
+    .post('/api/transfer/:id', transfer)
 
 module.exports= Router

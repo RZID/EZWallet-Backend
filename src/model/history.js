@@ -1,7 +1,7 @@
 const connection = require('../config/db')
 
 module.exports = {
-    mListHistory: (id, search, param, sort ,offset, limit) => {
+    mListHistory: (id, param, sort ,offset, limit) => {
         return new Promise ((resolve, reject) => {
             connection.query(`SELECT history.created_at,
             history.from_id,
@@ -18,9 +18,7 @@ module.exports = {
                         ON history.from_id=user_from.id
         LEFT JOIN users as user_to
                         ON history.to_id=user_to.id
-            WHERE 
-            IF( history.from_id = ${id} OR history.to_id = ${id}, 
-                user_from.name, user_to.name) LIKE '%${search}%'
+            WHERE history.from_id = ${id} OR history.to_id = ${id}
             ORDER BY ${param} ${sort}
             LIMIT ${offset}, ${limit}
             `,(err, result) => {
@@ -32,7 +30,7 @@ module.exports = {
             })
         })
     },
-    mTotal: (id, search) => {
+    mTotal: (id) => {
         return new Promise ((resolve, reject)=>{
             connection.query(`SELECT COUNT(*) as total
             FROM history
@@ -40,9 +38,7 @@ module.exports = {
                 ON history.from_id=user_from.id
             LEFT JOIN users as user_to
                 ON history.to_id=user_to.id
-            WHERE 
-            IF( history.from_id = ${id} OR history.to_id = ${id}, 
-                user_from.name, user_to.name) LIKE '%${search}%'`
+            WHERE history.from_id = ${id} OR history.to_id = ${id}`
             ,(err, result)=>{
                 if(err){
                     reject(new Error(err))
@@ -92,25 +88,13 @@ module.exports = {
         })
     },
     // kalau transfer sukses, to_id (user yang dituju) saldo nya bertambah
-    mTransferSuccess: (data) => {
-        return new Promise ((resolve, reject)=>{
-            connection.query(`
-            UPDATE users SET
-            balance = IF(id=${data.to_id}, balance+${data.amount}, balance-${data.amount})
-            WHERE id IN (${data.to_id},${data.from_id})
-            ` , (err, result)=>{
-                if(err){
-                    reject(new Error(err))
-                }else{
-                    resolve(result)
-                }
-            })
-        })
-    }
-    // mTransferCancel: (data, id) => {
+    // mTransferSuccess: (data) => {
     //     return new Promise ((resolve, reject)=>{
-    //         connection.query(`UPDATE users SET balance=${data}+balance 
-    //         WHERE id=${id}` , (err, result)=>{
+    //         connection.query(`
+    //         UPDATE users SET
+    //         balance = IF(id=${data.to_id}, balance+${data.amount}, balance-${data.amount})
+    //         WHERE id IN (${data.to_id},${data.from_id})
+    //         ` , (err, result)=>{
     //             if(err){
     //                 reject(new Error(err))
     //             }else{

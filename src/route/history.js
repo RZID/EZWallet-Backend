@@ -13,6 +13,5 @@ Router
     .get('/api/history/:id', authentication, listHistory)
     .post('/api/history', authentication, insertHistory)
     .patch('/api/history/:id', authentication, updateHistory)
-    .patch('/api/transfer', authentication, transferSuccess)
 
 module.exports= Router
