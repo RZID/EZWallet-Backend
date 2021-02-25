@@ -48,10 +48,11 @@ module.exports = {
             })
         })
     },
-    mAllUser: (searchParams, search, param, sort ,offset, limit) => {
+    mAllUser: (id, searchParams, search, param, sort ,offset, limit) => {
         return new Promise ((resolve, reject)=>{
             connection.query(`SELECT * FROM users
-            WHERE ${searchParams} LIKE '%${search}%' ORDER BY ${param} ${sort}
+            WHERE id != ${id} AND 
+            ${searchParams} LIKE '%${search}%' ORDER BY ${param} ${sort}
             LIMIT ${offset}, ${limit} `
             ,(err, result)=>{
                 if(err){

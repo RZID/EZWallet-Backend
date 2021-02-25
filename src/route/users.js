@@ -13,7 +13,7 @@ const { authentication } = require('../helper/middleware/auth')
 const singleUpload = require('../helper/middleware/upload')
 
 Router
-    .get('/api/allUser', authentication, listUser)
+    .get('/api/allUser/:id', authentication, listUser)
     .get('/api/user/:id', authentication, detailUser)
     .post('/api/login', login)
     .post('/api/register', register)

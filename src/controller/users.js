@@ -187,6 +187,7 @@ module.exports = {
     },
     listUser: async (req, res)=>{
         try {
+            const id = req.params.id
             const searchParams = req.query.searchParams ? req.query.searchParams : 'name'
             const search = req.query.search ? req.query.search : ''
             const param = req.query.param ? req.query.param : 'name'
@@ -196,7 +197,7 @@ module.exports = {
             const offset = page===1 ? 0 : (page-1)*limit
             const responseTotal = await mTotal(searchParams, search) // count total page
         
-            mAllUser(searchParams, search, param, sort, offset, limit)
+            mAllUser(id, searchParams, search, param, sort, offset, limit)
             .then((response)=>{
                 const data = response
                 const pagination = {
@@ -211,12 +212,10 @@ module.exports = {
                     notFound(res,"Data unavailable", data)
                 }
             }).catch((err)=>{
-                // failed(res, 'Internal server error', err)
-                console.log(err)
+                failed(res, 'Internal server error', err)
             })
         } catch (error) {
-            // failed(res, 'Internal server error', [])
-            console.log(error)
+            failed(res, 'Internal server error', [])
         }
     }
 }

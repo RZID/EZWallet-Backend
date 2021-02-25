@@ -81,4 +81,7 @@ module.exports = {
             failed(res, 'Internal server error', [])
         }
     },
+    transfer: (req, res) =>{
+        
+    }
 }
