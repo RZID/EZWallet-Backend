@@ -87,20 +87,30 @@ module.exports = {
             })
         })
     },
-    // kalau transfer sukses, to_id (user yang dituju) saldo nya bertambah
-    // mTransferSuccess: (data) => {
-    //     return new Promise ((resolve, reject)=>{
-    //         connection.query(`
-    //         UPDATE users SET
-    //         balance = IF(id=${data.to_id}, balance+${data.amount}, balance-${data.amount})
-    //         WHERE id IN (${data.to_id},${data.from_id})
-    //         ` , (err, result)=>{
-    //             if(err){
-    //                 reject(new Error(err))
-    //             }else{
-    //                 resolve(result)
-    //             }
-    //         })
-    //     })
-    // }
+    mDetailHistory: (id, status) => {
+        return new Promise ((resolve, reject) => {
+            connection.query(`SELECT * FROM history
+            WHERE history.to_id = ${id} AND status = 1
+            `,(err, result) => {
+                if(err){
+                    reject(new Error(err))
+                }else{
+                    resolve(result)
+                }
+            })
+        })
+    },
+    mDetailHistoryCancel: (id, status) => {
+        return new Promise ((resolve, reject) => {
+            connection.query(`SELECT * FROM history
+            WHERE history.from_id = ${id} AND status = 1
+            `,(err, result) => {
+                if(err){
+                    reject(new Error(err))
+                }else{
+                    resolve(result)
+                }
+            })
+        })
+    }
 }
