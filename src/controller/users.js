@@ -134,7 +134,7 @@ module.exports = {
             }else{
                 mUpdateUser(data, id)
                 .then((response)=>{
-                    success(res, response, {}, 'Update profile success')
+                    success(res, response, {}, 'Update success')
                 }).catch((err)=>{
                     failed(res, 'Internal server error', [])
                 })
