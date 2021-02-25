@@ -5,10 +5,6 @@ const {
     mUpdateHistory
 } = require('../model/history')
 
-// const {
-//     mDetailUser
-// } = require('../model/users')
-
 const { success, failed, notFound } = require('../helper/response')
 
 module.exports = {
@@ -83,27 +79,4 @@ module.exports = {
             failed(res, 'Internal server error', [])
         }
     }
-    // transferSuccess: async (req, res) =>{
-    //     try {
-    //         const data = req.body
-    //         const detail = await mDetailUser(data.from_id)
-
-    //         if(!data.from_id || !data.to_id || !data.amount){
-    //                 failed(res, 'All textfield is required!', [])
-    //         }
-
-    //         if(detail[0].balance > data.amount){
-    //             mTransferSuccess(data)
-    //             .then((response)=>{
-    //                 success(res, response, {}, 'Transfer success')
-    //             }).catch((err)=>{
-    //                 failed(res, 'All textfield is required!', [])
-    //             })
-    //         }else{
-    //             failed(res, 'Check your balance', [])
-    //         }
-    //     } catch (error) {
-    //         failed(res, 'Internal server error', [])
-    //     }
-    // }
 }
