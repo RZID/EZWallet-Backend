@@ -82,6 +82,26 @@ module.exports = {
         }
     },
     transfer: (req, res) =>{
-        
+        try {
+            const data = { 
+                from_id: req.body.from_id,
+                to_id: req.body.to_id,
+                amount: req.body.amount,
+                status: req.body.status,
+                notes: req.body.notes
+            }
+            if(!data.from_id || !data.to_id || !data.amount || !data.status || !data.notes){
+                failed(res, 'All textfield is required!', [])
+            }else{
+                mInsertHistory(data)
+                .then((response)=>{
+                    success(res, response, {}, 'Insert history success')
+                }).catch((err)=>{
+                    failed(res, 'All textfield is required!', [])
+                })
+            }
+        } catch (error) {
+            
+        }
     }
 }
