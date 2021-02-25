@@ -1,13 +1,28 @@
 const connection = require('../config/db')
 
 module.exports = {
-    mListHistory: (id, searchParams, search, param, sort ,offset, limit) => {
+    mListHistory: (id, search, param, sort ,offset, limit) => {
         return new Promise ((resolve, reject) => {
-            connection.query(`SELECT history.id as id, history.from_id as from_id, history.to_id AS to_id, users.image as image, users.name as name, history.amount, status, notes, UNIX_TIMESTAMP(created_at) AS time FROM history 
-            LEFT JOIN users ON history.to_id = users.id
-            WHERE history.from_id = ${id} OR 
+            connection.query(`SELECT history.created_at,
+            history.from_id,
+            history.to_id,
+            history.amount,
+            history.status,
+            history.notes,
+            user_from.name as from_name,
+            user_from.image as from_image,
+            user_to.name as to_name,
+            user_to.image as to_image
+            FROM history
+        LEFT JOIN users as user_from
+                        ON history.from_id=user_from.id
+        LEFT JOIN users as user_to
+                        ON history.to_id=user_to.id
+            WHERE history.from_id = ${id} AND
+            user_from.name LIKE '%${search}%' OR
             history.to_id = ${id} AND
-            ${searchParams} LIKE '%${search}%' ORDER BY ${param} ${sort}
+            user_to.name LIKE '%${search}%'
+            ORDER BY ${param} ${sort}
             LIMIT ${offset}, ${limit}
             `,(err, result) => {
                 if(err){
@@ -18,22 +33,22 @@ module.exports = {
             })
         })
     },
-    mTotal: (id, searchParams, search) => {
-        return new Promise ((resolve, reject)=>{
-            connection.query(`SELECT COUNT(*) as total FROM history
-            LEFT JOIN users ON history.to_id = users.id
-            WHERE from_id = ${id} OR 
-            history.to_id = ${id}
-            AND ${searchParams} LIKE '%${search}%'`
-            ,(err, result)=>{
-                if(err){
-                    reject(new Error(err))
-                }else{
-                    resolve(result)
-                }
-            })
-        })
-    },
+    // mTotal: (id, searchParams, search) => {
+    //     return new Promise ((resolve, reject)=>{
+    //         connection.query(`SELECT COUNT(*) as total FROM history
+    //         LEFT JOIN users ON history.to_id = users.id
+    //         WHERE from_id = ${id} OR 
+    //         history.to_id = ${id}
+    //         AND user_to.name LIKE '%${search}%'`
+    //         ,(err, result)=>{
+    //             if(err){
+    //                 reject(new Error(err))
+    //             }else{
+    //                 resolve(result)
+    //             }
+    //         })
+    //     })
+    // },
     mInsertHistory: (data) => {
         return new Promise ((resolve, reject)=>{
             connection.query(`INSERT INTO history (from_id, to_id, amount, status, notes)
