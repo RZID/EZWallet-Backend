@@ -13,7 +13,7 @@ const {
 const { success, failed, notFound } = require('../helper/response')
 
 module.exports = {
-    listHistory: (req, res)=>{
+    listHistory: async (req, res)=>{
         try {
             const id = req.params.id
             // const searchParams = req.query.searchParams ? req.query.searchParams : 'user_from.name'
@@ -23,7 +23,7 @@ module.exports = {
             const limit = req.query.limit ? req.query.limit : 6
             const page = req.query.page ? req.query.page : 1
             const offset = page===1 ? 0 : (page-1)*limit
-            // const responseTotal = await mTotal(id, search) // count total page
+            // const responseTotal = await mTotal(id, searchParams, search) // count total page
             
             mListHistory(id, search, param, sort, offset, limit)
             .then((response)=>{

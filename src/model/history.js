@@ -7,6 +7,7 @@ module.exports = {
             history.from_id,
             history.to_id,
             history.amount,
+            history.notes,
             user_from.name as from_name,
             user_from.image as from_image,
             user_to.name as to_name,
@@ -16,8 +17,12 @@ module.exports = {
                         ON history.from_id=user_from.id
         LEFT JOIN users as user_to
                         ON history.to_id=user_to.id
-            WHERE history.from_id = ${id} OR 
-            history.to_id = ${id}
+            WHERE history.from_id = ${id} OR
+            user_from.name LIKE '%${search}%' OR
+            history.to_id = ${id} OR
+            user_to.name LIKE '%${search}%'
+            ORDER BY ${param} ${sort}
+            LIMIT ${offset}, ${limit}
             `,(err, result) => {
                 if(err){
                     reject(new Error(err))
