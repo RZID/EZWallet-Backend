@@ -59,5 +59,46 @@ module.exports = {
                 }
             })
         })
+    },
+    mInsertHistory: (data) => {
+        return new Promise ((resolve, reject)=>{
+            connection.query(`INSERT INTO history (from_id, to_id, amount, status, notes)
+            VALUES ( '${data.from_id}', '${data.to_id}', '${data.amount}', '${data.status}', '${data.notes}' ) `
+            , (err, result)=>{
+                if(err){
+                    reject(new Error(err))
+                }else{
+                    resolve(result)
+                }
+            })
+        })
+    },
+    // kalau transfer sukses, to_id (user yang dituju) saldo nya bertambah
+    mTransferSuccess: (data) => {
+        return new Promise ((resolve, reject)=>{
+            connection.query(`
+            UPDATE users SET
+            balance = IF(id=${data.to_id}, balance+${data.amount}, balance-${data.amount})
+            WHERE id IN (${data.to_id},${data.from_id})
+            ` , (err, result)=>{
+                if(err){
+                    reject(new Error(err))
+                }else{
+                    resolve(result)
+                }
+            })
+        })
     }
+    // mTransferCancel: (data, id) => {
+    //     return new Promise ((resolve, reject)=>{
+    //         connection.query(`UPDATE users SET balance=${data}+balance 
+    //         WHERE id=${id}` , (err, result)=>{
+    //             if(err){
+    //                 reject(new Error(err))
+    //             }else{
+    //                 resolve(result)
+    //             }
+    //         })
+    //     })
+    // }
 }

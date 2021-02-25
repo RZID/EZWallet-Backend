@@ -2,7 +2,8 @@ const {
     mListHistory,
     mTotal,
     mInsertHistory,
-    mUpdateHistory
+    mUpdateHistory,
+    mTransferSuccess
 } = require('../model/history')
 
 const { success, failed, notFound } = require('../helper/response')
@@ -81,27 +82,21 @@ module.exports = {
             failed(res, 'Internal server error', [])
         }
     },
-    transfer: (req, res) =>{
+    transferSuccess: (req, res) =>{
         try {
-            const data = { 
-                from_id: req.body.from_id,
-                to_id: req.body.to_id,
-                amount: req.body.amount,
-                status: req.body.status,
-                notes: req.body.notes
-            }
-            if(!data.from_id || !data.to_id || !data.amount || !data.status || !data.notes){
+            const data = req.body
+            if(!data.from_id || !data.to_id || !data.amount){
                 failed(res, 'All textfield is required!', [])
             }else{
-                mInsertHistory(data)
+                mTransferSuccess(data)
                 .then((response)=>{
-                    success(res, response, {}, 'Insert history success')
+                    success(res, response, {}, 'Transfer success')
                 }).catch((err)=>{
                     failed(res, 'All textfield is required!', [])
                 })
             }
         } catch (error) {
-            
+            failed(res, 'Internal server error', [])
         }
     }
 }
