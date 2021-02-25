@@ -18,10 +18,9 @@ module.exports = {
                         ON history.from_id=user_from.id
         LEFT JOIN users as user_to
                         ON history.to_id=user_to.id
-            WHERE history.from_id = ${id} AND
-            user_from.name LIKE '%${search}%' OR
-            history.to_id = ${id} AND
-            user_to.name LIKE '%${search}%'
+            WHERE 
+            IF( history.from_id = ${id} OR history.to_id = ${id}, 
+                user_from.name, user_to.name) LIKE '%${search}%'
             ORDER BY ${param} ${sort}
             LIMIT ${offset}, ${limit}
             `,(err, result) => {
@@ -33,22 +32,26 @@ module.exports = {
             })
         })
     },
-    // mTotal: (id, searchParams, search) => {
-    //     return new Promise ((resolve, reject)=>{
-    //         connection.query(`SELECT COUNT(*) as total FROM history
-    //         LEFT JOIN users ON history.to_id = users.id
-    //         WHERE from_id = ${id} OR 
-    //         history.to_id = ${id}
-    //         AND user_to.name LIKE '%${search}%'`
-    //         ,(err, result)=>{
-    //             if(err){
-    //                 reject(new Error(err))
-    //             }else{
-    //                 resolve(result)
-    //             }
-    //         })
-    //     })
-    // },
+    mTotal: (id, search) => {
+        return new Promise ((resolve, reject)=>{
+            connection.query(`SELECT COUNT(*) as total
+            FROM history
+            LEFT JOIN users as user_from
+                ON history.from_id=user_from.id
+            LEFT JOIN users as user_to
+                ON history.to_id=user_to.id
+            WHERE 
+            IF( history.from_id = ${id} OR history.to_id = ${id}, 
+                user_from.name, user_to.name) LIKE '%${search}%'`
+            ,(err, result)=>{
+                if(err){
+                    reject(new Error(err))
+                }else{
+                    resolve(result)
+                }
+            })
+        })
+    },
     mInsertHistory: (data) => {
         return new Promise ((resolve, reject)=>{
             connection.query(`INSERT INTO history (from_id, to_id, amount, status, notes)
