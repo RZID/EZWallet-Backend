@@ -37,9 +37,9 @@ module.exports = {
                         failed(res, 'Internal serverrr error', [])
                     })
                 }else{
-                    // failed(res, 'Check your balance', [])
-                    console.log(balance[0].balance)
-                    console.log(body.amount)
+                    failed(res, 'Check your balance', [])
+                    // console.log(balance[0].balance)
+                    // console.log(body.amount)
                 }
             }
         } catch(err) {
