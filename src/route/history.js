@@ -4,8 +4,7 @@ const Router = express.Router()
 const { 
     listHistory,
     insertHistory,
-    updateHistory,
-    transferSuccess
+    updateHistory
 } = require('../controller/history')
 const { authentication } = require('../helper/middleware/auth')
 
