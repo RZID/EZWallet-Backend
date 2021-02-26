@@ -12,9 +12,11 @@ module.exports = {
             user_from.name as from_name,
             user_from.image as from_image,
             user_from.phone as from_phone,
+            user_from.balance as from_balance,
             user_to.name as to_name,
             user_to.image as to_image,
-            user_to.phone as to_phone
+            user_to.phone as to_phone,
+            user_to.balance as to_balance
             FROM history
         LEFT JOIN users as user_from
                         ON history.from_id=user_from.id
