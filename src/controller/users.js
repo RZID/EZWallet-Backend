@@ -111,6 +111,10 @@ module.exports = {
                 const salt = await bcrypt.genSalt(10)
                 data.pin = await bcrypt.hash(data.pin, salt)
             }
+            if(data.password){
+                const salt = await bcrypt.genSalt(10)
+                data.password = await bcrypt.hash(data.password, salt)
+            }
             if(req.file){
                 if(detail[0].image === 'default.png'){
                     data.image = req.file.filename
@@ -218,22 +222,27 @@ module.exports = {
             failed(res, 'Internal server error', [])
         }
     },
-    controllerCheckPassword: async (req, res) => {
+    checkPassword: (req, res) => {
         try {
-            const id = req.params.id
             const body = req.body
-            mDetailUser(id).then(async(response) => {
+            const id = req.params.id
+
+            mDetailUser(id).then( async (response) => {
                 const checkPassword = await bcrypt.compare(body.password, response[0].password)
                 if(checkPassword){
-                    const salt = await bcrypt.genSalt(10) 
-                    const password = await bcrypt.hash(body.password, salt)
-                    res.json(password)
-                } else {
-                    res.json("Your old password are wrong")
+                    success(res, {}, {}, 'Login success')
+                }else{
+                    failed(res, 'Wrong password', {})
+                }
+            }).catch((err) => {
+                if(!body.password){
+                    failed(res, 'Please input your password', err)
+                }else{
+                    failed(res, 'Internal server error', err)
                 }
             })
         } catch(err) {
-
+            failed(res, 'Internal server error', err)
         }
     }
 }

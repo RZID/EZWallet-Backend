@@ -19,7 +19,7 @@ module.exports = {
             if( !body.to_id || !body.amount || !body.notes){
                 failed(res, 'All textfield is required!', [])
             }else{
-                if(balance[0].balance > body.amount){
+                if(balance[0].balance >= body.amount){
                     mTransfer(amount, id).then((response) => {
                         const data = { 
                             from_id: id,
@@ -37,9 +37,7 @@ module.exports = {
                         failed(res, 'Internal serverrr error', [])
                     })
                 }else{
-                    // failed(res, 'Check your balance', [])
-                    console.log(balance[0].balance)
-                    console.log(body.amount)
+                    failed(res, 'Check your balance', [])
                 }
             }
         } catch(err) {
