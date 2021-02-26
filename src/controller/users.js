@@ -217,5 +217,23 @@ module.exports = {
         } catch (error) {
             failed(res, 'Internal server error', [])
         }
+    },
+    controllerCheckPassword: async (req, res) => {
+        try {
+            const id = req.params.id
+            const body = req.body
+            mDetailUser(id).then(async(response) => {
+                const checkPassword = await bcrypt.compare(body.password, response[0].password)
+                if(checkPassword){
+                    const salt = await bcrypt.genSalt(10) 
+                    const password = await bcrypt.hash(body.password, salt)
+                    res.json(password)
+                } else {
+                    res.json("Your old password are wrong")
+                }
+            })
+        } catch(err) {
+
+        }
     }
 }
