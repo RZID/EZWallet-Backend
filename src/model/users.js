@@ -63,9 +63,9 @@ module.exports = {
             })
         })
     },
-    mTotal: (searchParams, search) => {
+    mTotal: (id, searchParams, search) => {
         return new Promise ((resolve, reject)=>{
-            connection.query(`SELECT COUNT(*) as total FROM users WHERE ${searchParams} LIKE '%${search}%'`
+            connection.query(`SELECT COUNT(*) as total FROM users WHERE id != ${id} AND ${searchParams} LIKE '%${search}%'`
             ,(err, result)=>{
                 if(err){
                     reject(new Error(err))

@@ -195,7 +195,7 @@ module.exports = {
             const limit = req.query.limit ? req.query.limit : 6
             const page = req.query.page ? req.query.page : 1
             const offset = page===1 ? 0 : (page-1)*limit
-            const responseTotal = await mTotal(searchParams, search) // count total page
+            const responseTotal = await mTotal(id, searchParams, search) // count total page
         
             mAllUser(id, searchParams, search, param, sort, offset, limit)
             .then((response)=>{
