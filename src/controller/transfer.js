@@ -38,11 +38,6 @@ module.exports = {
                     })
                 }else{
                     failed(res, 'Check your balance', [])
-<<<<<<< HEAD
-                    // console.log(balance[0].balance)
-                    // console.log(body.amount)
-=======
->>>>>>> 8aea6888a97a1e4211f4f5a4615e87b137f856dc
                 }
             }
         } catch(err) {
@@ -154,7 +149,6 @@ module.exports = {
                 }).catch((err) => {
                     failed(res, 'Internal serverrr error', [])
                 })
-
             }
         } catch (error) {
             failed(res, 'Internal serverrr error', [])
