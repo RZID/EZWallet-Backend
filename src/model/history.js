@@ -3,7 +3,9 @@ const connection = require('../config/db')
 module.exports = {
     mListHistory: (id, param, sort ,offset, limit) => {
         return new Promise ((resolve, reject) => {
-            connection.query(`SELECT history.created_at,
+            connection.query(`SELECT
+            history.id,
+            history.created_at,
             history.from_id,
             history.to_id,
             history.amount,
