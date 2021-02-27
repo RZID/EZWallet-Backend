@@ -5,9 +5,7 @@ const {
     transfer,
     transferSuccess,
     transferCancel,
-    transferCancelSender,
-    topUp,
-    test
+    topUp
 } = require('../controller/transfer')
 const { authentication } = require('../helper/middleware/auth')
 
@@ -15,8 +13,6 @@ Router
     .post('/api/transfer/:id', authentication, transfer)
     .post('/api/transferSuccess/:id', authentication, transferSuccess)  // id history
     .post('/api/transferCancel/:id', authentication, transferCancel)    // id history
-    // .post('/api/transferCancelSender/:id', authentication, transferCancelSender)
     .post('/api/topUp/:id', authentication, topUp)
-    // .post('/api/test/:id', authentication, test)
 
 module.exports= Router

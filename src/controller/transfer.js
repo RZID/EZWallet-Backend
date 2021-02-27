@@ -95,34 +95,6 @@ module.exports = {
             failed(res, 'No pending transfer', [])
         }
     },
-    // cancel from sender
-    // transferCancelSender: async (req, res) => {
-    //     try {
-    //         const from_id = req.params.id // id pengirim
-    //         const balance = await mDetailUser(from_id)
-
-    //         mDetailHistoryCancel(from_id).then((response)=>{
-    //             const amount = Number(balance[0].balance) + Number(response[0].amount)
-    //             const id_history = response[0].id
-    //             const data = {
-    //                 status: 3
-    //             }
-    //             mUpdateHistory(data, id_history).then((response) => {
-    //                 mTransfer(amount, from_id).then((response) => {
-    //                     success(res, response, {}, 'Transfer canceled')
-    //                 }).catch((err) => {
-    //                     failed(res, 'Internal server error', [])
-    //                 })
-    //             }).catch((err) => {
-    //                 failed(res, 'Internal server error', [])
-    //             })
-    //         }).catch((err) => {
-    //             failed(res, 'No pending transfer', [])
-    //         })
-    //     } catch(err) {
-    //         failed(res, 'Internal Server Error', [])
-    //     }
-    // },
     topUp: async (req, res) => {
         try {
             const id = req.params.id
