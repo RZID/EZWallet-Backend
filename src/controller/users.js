@@ -111,17 +111,12 @@ module.exports = {
                 const salt = await bcrypt.genSalt(10)
                 data.pin = await bcrypt.hash(data.pin, salt)
             }
-<<<<<<< HEAD
-            if (req.file) {
-                if (detail[0].image === 'default.png') {
-=======
-            if(data.password){
+            if (data.password) {
                 const salt = await bcrypt.genSalt(10)
                 data.password = await bcrypt.hash(data.password, salt)
             }
-            if(req.file){
-                if(detail[0].image === 'default.png'){
->>>>>>> 8aea6888a97a1e4211f4f5a4615e87b137f856dc
+            if (req.file) {
+                if (detail[0].image === 'default.png') {
                     data.image = req.file.filename
                     mUpdateUser(data, id)
                         .then((response) => {
@@ -203,15 +198,9 @@ module.exports = {
             const sort = req.query.sort ? req.query.sort : 'ASC'
             const limit = req.query.limit ? req.query.limit : 6
             const page = req.query.page ? req.query.page : 1
-<<<<<<< HEAD
             const offset = page === 1 ? 0 : (page - 1) * limit
-            const responseTotal = await mTotal(searchParams, search) // count total page
-
-=======
-            const offset = page===1 ? 0 : (page-1)*limit
             const responseTotal = await mTotal(id, searchParams, search) // count total page
-        
->>>>>>> 8aea6888a97a1e4211f4f5a4615e87b137f856dc
+
             mAllUser(id, searchParams, search, param, sort, offset, limit)
                 .then((response) => {
                     const data = response
@@ -238,21 +227,21 @@ module.exports = {
             const body = req.body
             const id = req.params.id
 
-            mDetailUser(id).then( async (response) => {
+            mDetailUser(id).then(async (response) => {
                 const checkPassword = await bcrypt.compare(body.password, response[0].password)
-                if(checkPassword){
+                if (checkPassword) {
                     success(res, {}, {}, 'Login success')
-                }else{
+                } else {
                     failed(res, 'Wrong password', {})
                 }
             }).catch((err) => {
-                if(!body.password){
+                if (!body.password) {
                     failed(res, 'Please input your password', err)
-                }else{
+                } else {
                     failed(res, 'Internal server error', err)
                 }
             })
-        } catch(err) {
+        } catch (err) {
             failed(res, 'Internal server error', err)
         }
     }
