@@ -105,18 +105,18 @@ module.exports = {
                 }
             })
         })
-    },
-    mDetailHistoryCancel: (id) => {
-        return new Promise ((resolve, reject) => {
-            connection.query(`SELECT * FROM history
-            WHERE history.from_id = ${id} AND status = 1
-            `,(err, result) => {
-                if(err){
-                    reject(new Error(err))
-                }else{
-                    resolve(result)
-                }
-            })
-        })
     }
+    // mDetailHistoryCancel: (id) => {
+    //     return new Promise ((resolve, reject) => {
+    //         connection.query(`SELECT * FROM history
+    //         WHERE history.from_id = ${id} AND status = 1
+    //         `,(err, result) => {
+    //             if(err){
+    //                 reject(new Error(err))
+    //             }else{
+    //                 resolve(result)
+    //             }
+    //         })
+    //     })
+    // }
 }
