@@ -222,20 +222,29 @@ module.exports = {
             failed(res, 'Internal server error', [])
         }
     },
-    checkPassword: (req, res) => {
+    changePassword: (req, res) => {
         try {
             const body = req.body
             const id = req.params.id
 
             mDetailUser(id).then( async (response) => {
-                const checkPassword = await bcrypt.compare(body.password, response[0].password)
+                const checkPassword = await bcrypt.compare(body.oldpassword, response[0].password)
                 if(checkPassword){
-                    success(res, {}, {}, 'Login success')
+                    const salt = await bcrypt.genSalt(10)
+                    const password = await bcrypt.hash(body.password, salt)
+                    const data = {
+                        password
+                    }
+                    mUpdateUser(data, id).then((response) => {
+                        success(res, {}, {}, 'Success change password')
+                    }).catch((err) => {
+                        failed(res, 'Internal server error', {})
+                    })
                 }else{
-                    failed(res, 'Wrong password', {})
+                    failed(res, 'Your old password are wrong', {})
                 }
             }).catch((err) => {
-                if(!body.password){
+                if(!body.oldpassword || !body.password){
                     failed(res, 'Please input your password', err)
                 }else{
                     failed(res, 'Internal server error', err)
