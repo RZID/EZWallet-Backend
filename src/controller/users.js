@@ -154,9 +154,9 @@ module.exports = {
             if(response.length === 1){
                 const checkPIN = await bcrypt.compare(body.pin, response[0].pin)
                 if(checkPIN){
-                    success(res, {}, {}, 'Login success')
+                    success(res, {}, {}, 'Check pin success')
                 }else{
-                    failed(res, 'Login failed, please check your PIN number', {})
+                    failed(res, 'Check pin failed, please check your PIN number', {})
                 }
             }
         }).catch((err) => {
