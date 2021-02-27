@@ -11,18 +11,18 @@ const { success, failed, notFound } = require('../helper/response')
 module.exports = {
     transfer: async (req, res) => {
         try {
-            const id = req.params.id //id param
+            const id = req.params.id // from_id
             const body = req.body //req body buat uang yg ditransfer
             const balance = await mDetailUser(id) //ngambil balance sebelum di update
             const amount = Number(balance[0].balance) - body.amount //balance yang bakal dimasukin/update ke balance user
 
-            if(!body.from_id || !body.to_id || !body.amount || !body.notes){
+            if( !body.to_id || !body.amount || !body.notes){
                 failed(res, 'All textfield is required!', [])
             }else{
-                if(balance[0].balance > body.amount){
+                if(balance[0].balance >= body.amount){
                     mTransfer(amount, id).then((response) => {
                         const data = { 
-                            from_id: req.body.from_id,
+                            from_id: id,
                             to_id: req.body.to_id,
                             amount: req.body.amount,
                             status: 1,
@@ -122,6 +122,37 @@ module.exports = {
             })
         } catch(err) {
             failed(res, 'Internal Server Error', [])
+        }
+    },
+    topUp: async (req, res) => {
+        try {
+            const id = req.params.id
+            const balance = await mDetailUser(id)
+            const amount = Number(balance[0].balance) + Number(req.body.amount)
+            
+            if(!req.body.amount){
+                failed(res, 'All field required', [])
+            }else{
+                mTransfer(amount, id).then((response) => {
+                    const data = { 
+                        from_id: 1,
+                        to_id: id,
+                        amount: req.body.amount,
+                        status: 4,
+                        notes: 'Top Up'
+                    }
+                    mInsertHistory(data).then((response) => {
+                        success(res, response, {}, 'Top up success')
+                    }).catch((err) => {
+                        failed(res, 'Internal server error', [])
+                    })
+                }).catch((err) => {
+                    failed(res, 'Internal serverrr error', [])
+                })
+
+            }
+        } catch (error) {
+            failed(res, 'Internal serverrr error', [])
         }
     }
 }
