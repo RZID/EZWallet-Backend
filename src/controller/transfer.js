@@ -153,5 +153,33 @@ module.exports = {
         } catch (error) {
             failed(res, 'Internal serverrr error', [])
         }
+    },
+    test: async (req, res) => {
+        try {
+            const history_id = req.params.id // id history
+            // const balance = await mDetailUser(to_id)
+
+            mDetailHistory(history_id).then( async(response)=>{
+                const to_id = response[0].to_id
+                const balance = await mDetailUser(to_id)
+                const amount = Number(balance[0].balance) + Number(response[0].amount)
+                const data = {
+                    status: 2
+                }
+                mUpdateHistory(data, history_id).then((response) => {
+                    mTransfer(amount, to_id).then((response) => {
+                        success(res, response, {}, 'Transfer accepted')
+                    }).catch((err) => {
+                        failed(res, 'Internal server error', [])
+                    })
+                }).catch((err) => {
+                    failed(res, 'Internal server error', [])
+                })
+            }).catch((err) => {
+                failed(res, 'No pending transfer', [])
+            })
+        } catch(err) {
+            failed(res, 'Internal Server Error', [])
+        }
     }
 }

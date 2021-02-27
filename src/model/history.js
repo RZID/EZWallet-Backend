@@ -91,10 +91,10 @@ module.exports = {
             })
         })
     },
-    mDetailHistory: (id, status) => {
+    mDetailHistory: (id) => {
         return new Promise ((resolve, reject) => {
             connection.query(`SELECT * FROM history
-            WHERE history.to_id = ${id} AND status = 1
+            WHERE history.id = ${id} AND status = 1
             `,(err, result) => {
                 if(err){
                     reject(new Error(err))
@@ -104,7 +104,7 @@ module.exports = {
             })
         })
     },
-    mDetailHistoryCancel: (id, status) => {
+    mDetailHistoryCancel: (id) => {
         return new Promise ((resolve, reject) => {
             connection.query(`SELECT * FROM history
             WHERE history.from_id = ${id} AND status = 1
