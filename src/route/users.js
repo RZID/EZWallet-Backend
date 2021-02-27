@@ -20,6 +20,6 @@ Router
     .post('/api/register', register)
     .patch('/api/user/:id', authentication, singleUpload, updateUser)
     .post('/api/loginPIN/:id', authentication, loginPIN)
-    .patch('/api/changePassword/:id', changePassword)
+    .patch('/api/changePassword/:id', authentication, changePassword)
 
 module.exports= Router
