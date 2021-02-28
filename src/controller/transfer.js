@@ -149,7 +149,6 @@ module.exports = {
                 }).catch((err) => {
                     failed(res, 'Internal serverrr error', [])
                 })
-
             }
         } catch (error) {
             failed(res, 'Internal serverrr error', [])

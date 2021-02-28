@@ -8,7 +8,7 @@ const {
     loginPIN,
     detailUser,
     listUser,
-    checkPassword
+    changePassword
 } = require('../controller/users')
 const { authentication } = require('../helper/middleware/auth')
 const singleUpload = require('../helper/middleware/upload')
@@ -20,6 +20,6 @@ Router
     .post('/api/register', register)
     .patch('/api/user/:id', authentication, singleUpload, updateUser)
     .post('/api/loginPIN/:id', authentication, loginPIN)
-    .post('/api/checkPassword/:id', authentication, checkPassword)
+    .patch('/api/changePassword/:id', changePassword)
 
 module.exports= Router
