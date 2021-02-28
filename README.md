@@ -27,3 +27,4 @@ This is the backend service for this app. You can see the frontend service [here
 
 ## Documentation
 - [Postman](https://documenter.getpostman.com/view/13713483/TWDZGvp8)
+- [Deploy](http://3.92.79.15:4001)
