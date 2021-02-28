@@ -46,16 +46,16 @@ module.exports = {
     },
     transferSuccess: async (req, res) => {
         try {
-            const to_id = req.params.id // id penerima
-            const balance = await mDetailUser(to_id)
+            const history_id = req.params.id // id history
 
-            mDetailHistory(to_id).then((response)=>{
+            mDetailHistory(history_id).then( async(response)=>{
+                const to_id = response[0].to_id
+                const balance = await mDetailUser(to_id)
                 const amount = Number(balance[0].balance) + Number(response[0].amount)
-                const id_history = response[0].id
                 const data = {
                     status: 2
                 }
-                mUpdateHistory(data, id_history).then((response) => {
+                mUpdateHistory(data, history_id).then((response) => {
                     mTransfer(amount, to_id).then((response) => {
                         success(res, response, {}, 'Transfer accepted')
                     }).catch((err) => {
@@ -71,19 +71,18 @@ module.exports = {
             failed(res, 'Internal Server Error', [])
         }
     },
-    // cancel from receiver
+    // cancel from receiver & sender
     transferCancel: async (req, res) => {
         try {
-            const to_id = req.params.id // id penerima
-            const history = await mDetailHistory(to_id)
-            const id_history = history[0].id
+            const history_id = req.params.id // id history
+            const history = await mDetailHistory(history_id)
             const from_id = history[0].from_id
             const detail = await mDetailUser(from_id)
             const amount = Number(detail[0].balance) + Number(history[0].amount)
             const data = {
                 status: 3
             }
-            mUpdateHistory(data, id_history).then((response) => {
+            mUpdateHistory(data, history_id).then((response) => {
                 mTransfer(amount, from_id).then((response) => {
                     success(res, response, {}, 'Transfer canceled')
                 }).catch((err) => {
@@ -94,34 +93,6 @@ module.exports = {
             })
         } catch(err) {
             failed(res, 'No pending transfer', [])
-        }
-    },
-    // cancel from sender
-    transferCancelSender: async (req, res) => {
-        try {
-            const from_id = req.params.id // id pengirim
-            const balance = await mDetailUser(from_id)
-
-            mDetailHistoryCancel(from_id).then((response)=>{
-                const amount = Number(balance[0].balance) + Number(response[0].amount)
-                const id_history = response[0].id
-                const data = {
-                    status: 3
-                }
-                mUpdateHistory(data, id_history).then((response) => {
-                    mTransfer(amount, from_id).then((response) => {
-                        success(res, response, {}, 'Transfer canceled')
-                    }).catch((err) => {
-                        failed(res, 'Internal server error', [])
-                    })
-                }).catch((err) => {
-                    failed(res, 'Internal server error', [])
-                })
-            }).catch((err) => {
-                failed(res, 'No pending transfer', [])
-            })
-        } catch(err) {
-            failed(res, 'Internal Server Error', [])
         }
     },
     topUp: async (req, res) => {
@@ -152,6 +123,34 @@ module.exports = {
             }
         } catch (error) {
             failed(res, 'Internal serverrr error', [])
+        }
+    },
+    test: async (req, res) => {
+        try {
+            const history_id = req.params.id // id history
+            // const balance = await mDetailUser(to_id)
+
+            mDetailHistory(history_id).then( async(response)=>{
+                const to_id = response[0].to_id
+                const balance = await mDetailUser(to_id)
+                const amount = Number(balance[0].balance) + Number(response[0].amount)
+                const data = {
+                    status: 2
+                }
+                mUpdateHistory(data, history_id).then((response) => {
+                    mTransfer(amount, to_id).then((response) => {
+                        success(res, response, {}, 'Transfer accepted')
+                    }).catch((err) => {
+                        failed(res, 'Internal server error', [])
+                    })
+                }).catch((err) => {
+                    failed(res, 'Internal server error', [])
+                })
+            }).catch((err) => {
+                failed(res, 'No pending transfer', [])
+            })
+        } catch(err) {
+            failed(res, 'Internal Server Error', [])
         }
     }
 }

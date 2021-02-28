@@ -3,7 +3,9 @@ const connection = require('../config/db')
 module.exports = {
     mListHistory: (id, param, sort ,offset, limit) => {
         return new Promise ((resolve, reject) => {
-            connection.query(`SELECT history.created_at,
+            connection.query(`SELECT
+            history.id,
+            history.created_at,
             history.from_id,
             history.to_id,
             history.amount,
@@ -91,23 +93,10 @@ module.exports = {
             })
         })
     },
-    mDetailHistory: (id, status) => {
+    mDetailHistory: (id) => {
         return new Promise ((resolve, reject) => {
             connection.query(`SELECT * FROM history
-            WHERE history.to_id = ${id} AND status = 1
-            `,(err, result) => {
-                if(err){
-                    reject(new Error(err))
-                }else{
-                    resolve(result)
-                }
-            })
-        })
-    },
-    mDetailHistoryCancel: (id, status) => {
-        return new Promise ((resolve, reject) => {
-            connection.query(`SELECT * FROM history
-            WHERE history.from_id = ${id} AND status = 1
+            WHERE history.id = ${id} AND status = 1
             `,(err, result) => {
                 if(err){
                     reject(new Error(err))
