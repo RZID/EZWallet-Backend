@@ -127,7 +127,9 @@ module.exports = {
                 }else{
                     data.image = req.file.filename
                     const path = `./public/images/${detail[0].image}`
-                    fs.unlinkSync(path)
+                    if (fs.existsSync(path)) {
+                        fs.unlinkSync(path)
+                    }
                     mUpdateUser(data, id)
                     .then((response)=>{
                         success(res, response, {}, 'Update profile success')
