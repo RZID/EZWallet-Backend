@@ -106,7 +106,7 @@ module.exports = {
             }else{
                 mTransfer(amount, id).then((response) => {
                     const data = { 
-                        from_id: 1,
+                        from_id: id,
                         to_id: id,
                         amount: req.body.amount,
                         status: 4,
