@@ -205,7 +205,7 @@ module.exports = {
 
             mAllUser(id, searchParams, search, param, sort, offset, limit)
                 .then((response) => {
-                    const data = response
+                    const data = response.filter(el => el.id != 1)
                     const pagination = {
                         page: page,
                         limit: limit,
