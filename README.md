@@ -29,5 +29,9 @@ This is the backend service for this app. You can see the frontend service [here
 - [Postman](https://documenter.getpostman.com/view/13713483/TWDZGvp8)
 - [Deploy](http://3.92.79.15:4001)
 
+<<<<<<< HEAD
 ## Frontend
+=======
+## Frontend 
+>>>>>>> 382bf949046322a7a64fde243d1ac38c507ea733
 [Frontend](https://github.com/RZID/EZWallet-Frontend.git)
