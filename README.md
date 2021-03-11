@@ -26,6 +26,10 @@ This is the backend service for this app. You can see the frontend service [here
    - `DB_USER` = fill with USERNAME in your database configuration.
    - `DB_PASSWORD` = fill with PASSWORD in your database configuration (or leave it null if your database doesn't have password).
    - `JWT_SECRET` = fill with the unique value due to signature verifier on JWT.
+   - `TOKEN_MAIL_1` = fill with `FIRST MAILJET TOKEN` that given on their website. don't forget to register first on their panel
+   - `TOKEN_MAIL_2` = fill with `SECOND MAILJET TOKEN` that given on their website. don't forget to register first on their panel
+   - `FROM_MAIL` = fill with the email account that will be displayed when the user activates
+   - `FRONTEND_PATH` = fill with path to frontend URL. This used to activation that linked path in the email
 5. Run `npm run start` or `nodemon`
 
 ## Documentation
